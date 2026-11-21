@@ -4,6 +4,7 @@ import com.example.cryptoexchange.domain.model.CryptoCurrency
 
 data class CryptoUiState(
     val cryptos: List<CryptoCurrency> = emptyList(),
+    val sortOrder: CryptoSortOrder = CryptoSortOrder.POPULAR,
     val lastUpdatedMillis: Long? = null,
     val isRefreshing: Boolean = false,
     val isWaitingForNetwork: Boolean = false,
