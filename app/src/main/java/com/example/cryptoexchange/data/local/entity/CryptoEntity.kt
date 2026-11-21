@@ -17,6 +17,10 @@ data class CryptoEntity(
     val logoUrl: String?,
     @ColumnInfo(name = "price_usd")
     val priceUsd: Double?,
+    @ColumnInfo(name = "price_change_24h")
+    val priceChangePercentage24h: Double?,
+    @ColumnInfo(name = "is_favorite")
+    val isFavorite: Boolean = false,
     @ColumnInfo(name = "rank")
     val rank: Int,
     @ColumnInfo(name = "last_updated_millis")

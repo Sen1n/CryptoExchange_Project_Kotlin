@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface CryptoRepository {
     fun observeCryptos(): Flow<List<CryptoCurrency>>
     suspend fun syncCryptos(): SyncResult
+    suspend fun toggleFavorite(cryptoId: Int)
 }

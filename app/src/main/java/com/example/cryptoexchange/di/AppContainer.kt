@@ -1,5 +1,6 @@
 package com.example.cryptoexchange.di
 
+import com.example.cryptoexchange.domain.usecase.ToggleFavoriteUseCase
 import android.content.Context
 import com.example.cryptoexchange.data.local.database.CryptoDatabase
 import com.example.cryptoexchange.data.remote.api.CryptoApiService
@@ -49,6 +50,10 @@ class AppContainer(context: Context) {
 
     val observeCryptosUseCase: ObserveCryptosUseCase by lazy {
         ObserveCryptosUseCase(cryptoRepository)
+    }
+
+    val toggleFavoriteUseCase: ToggleFavoriteUseCase by lazy {
+        ToggleFavoriteUseCase(cryptoRepository)
     }
 
     val syncCryptosUseCase: SyncCryptosUseCase by lazy {

@@ -22,6 +22,10 @@ class CryptoRepositoryImpl(
         }
     }
 
+    override suspend fun toggleFavorite(cryptoId: Int) {
+        cryptoDao.toggleFavorite(cryptoId)
+    }
+
     override suspend fun syncCryptos(): SyncResult {
         return try {
             val response = apiService.getTopCryptos()

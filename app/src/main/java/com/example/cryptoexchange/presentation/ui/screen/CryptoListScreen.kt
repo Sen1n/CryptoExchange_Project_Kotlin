@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -139,6 +140,20 @@ fun CryptoListScreen(
                     }
                 }
 
+                uiState.cryptos.isEmpty() && uiState.sortOrder == CryptoSortOrder.FAVORITES -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Список обраних порожній.\nНатисніть ☆ біля потрібної монети, щоб додати її сюди.",
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
                 uiState.isInitialEmpty -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -154,17 +169,26 @@ fun CryptoListScreen(
                 }
 
                 else -> {
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 88.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    PullToRefreshBox(
+                        isRefreshing = uiState.isRefreshing,
+                        onRefresh = { viewModel.onManualRefreshClick() },
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        items(
-                            items = uiState.cryptos,
-                            key = { it.id }
-                        ) { crypto ->
-                            CryptoItemCard(crypto = crypto)
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(bottom = 88.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(
+                                items = uiState.cryptos,
+                                key = { it.id }
+                            ) { crypto ->
+                                CryptoItemCard(
+                                    crypto = crypto,
+                                    onFavoriteClick = { viewModel.onToggleFavorite(crypto.id) }
+                                )
+                            }
                         }
                     }
                 }

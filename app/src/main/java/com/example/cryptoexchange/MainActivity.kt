@@ -18,6 +18,7 @@ class MainActivity : ComponentActivity() {
         val appContainer = (application as CryptoApplication).appContainer
         val viewModelFactory = CryptoViewModelFactory(
             observeCryptosUseCase = appContainer.observeCryptosUseCase,
+            toggleFavoriteUseCase = appContainer.toggleFavoriteUseCase,
             syncScheduler = appContainer.syncScheduler
         )
 

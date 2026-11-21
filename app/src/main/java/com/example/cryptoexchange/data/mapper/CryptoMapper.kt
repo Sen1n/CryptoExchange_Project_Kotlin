@@ -11,6 +11,8 @@ fun CryptoEntity.toDomain(): CryptoCurrency = CryptoCurrency(
     symbol = symbol,
     logoUrl = logoUrl,
     priceUsd = priceUsd,
+    priceChangePercentage24h = priceChangePercentage24h,
+    isFavorite = isFavorite,
     rank = rank,
     lastUpdatedMillis = lastUpdatedMillis,
 )
@@ -22,6 +24,7 @@ fun CryptoAssetDto.toEntityOrNull(
     val validSymbol = symbol?.takeIf { it.isNotBlank() }?.uppercase() ?: return null
     val validName = name?.takeIf { it.isNotBlank() } ?: validSymbol
     val validPrice = currentPrice?.takeIf { !it.isNaN() && !it.isInfinite() && (it >= 0.0) }
+    val validChange24h = priceChangePercentage24h?.takeIf { !it.isNaN() && !it.isInfinite() }
     val entityId = id?.hashCode()?.let { if (it == Int.MIN_VALUE) 0 else abs(it) } ?: rank
 
     return CryptoEntity(
@@ -30,6 +33,8 @@ fun CryptoAssetDto.toEntityOrNull(
         symbol = validSymbol,
         logoUrl = image?.takeIf { it.isNotBlank() },
         priceUsd = validPrice,
+        priceChangePercentage24h = validChange24h,
+        isFavorite = false,
         rank = rank,
         lastUpdatedMillis = updatedAtMillis,
     )

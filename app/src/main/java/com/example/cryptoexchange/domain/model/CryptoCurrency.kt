@@ -6,6 +6,8 @@ data class CryptoCurrency(
     val symbol: String,
     val logoUrl: String?,
     val priceUsd: Double?,
+    val priceChangePercentage24h: Double?,
+    val isFavorite: Boolean,
     val rank: Int,
     val lastUpdatedMillis: Long
 )

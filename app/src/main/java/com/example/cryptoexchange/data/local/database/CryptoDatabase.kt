@@ -9,7 +9,7 @@ import com.example.cryptoexchange.data.local.entity.CryptoEntity
 
 @Database(
     entities = [CryptoEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class CryptoDatabase : RoomDatabase() {
@@ -25,7 +25,10 @@ abstract class CryptoDatabase : RoomDatabase() {
                     context.applicationContext,
                     CryptoDatabase::class.java,
                     "crypto_exchange.db"
-                ).build().also { INSTANCE = it }
+                )
+                    .fallbackToDestructiveMigration(dropAllTables = true)
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }

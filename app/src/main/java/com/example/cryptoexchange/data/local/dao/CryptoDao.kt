@@ -14,6 +14,12 @@ interface CryptoDao {
     @Query("SELECT * FROM cryptocurrencies ORDER BY rank ASC")
     fun observeAllSortedByRank(): Flow<List<CryptoEntity>>
 
+    @Query("SELECT id FROM cryptocurrencies WHERE is_favorite = 1")
+    suspend fun getFavoriteIds(): List<Int>
+
+    @Query("UPDATE cryptocurrencies SET is_favorite = NOT is_favorite WHERE id = :cryptoId")
+    suspend fun toggleFavorite(cryptoId: Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<CryptoEntity>)
 
@@ -22,7 +28,11 @@ interface CryptoDao {
 
     @Transaction
     suspend fun replaceTopList(items: List<CryptoEntity>) {
+        val favoriteIds = getFavoriteIds().toSet()
+        val updatedItems = items.map { entity ->
+            entity.copy(isFavorite = entity.id in favoriteIds)
+        }
         deleteAll()
-        insertAll(items)
+        insertAll(updatedItems)
     }
 }
